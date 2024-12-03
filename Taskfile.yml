@@ -2,7 +2,7 @@
 
 version: '3'
 
-# Please make sure DB_MIGRATION_ADDR is set in your .envrc file.
+# Please make sure DB_ADDR is set in your .envrc file.
 dotenv: [.envrc]
 
 env:
@@ -12,7 +12,7 @@ env:
   ado_test_file: "test-report.xml"
   migrations_path: ./cmd/migrate/migrations
   src: ./cmd/api
-  # grc is a command line colorizer. if you don't have it installed, you can remove it from the
+  # GRC is a command line colorizer. If you don't have it installed, you can remove it from the
   # command.
   grc: $(if command -v grc > /dev/null; then echo "grc"; else echo ""; fi)
 
@@ -37,7 +37,7 @@ tasks:
   test:
     deps: [build]
     cmds:
-      # colorize the output of the test command if grc is installed.
+      # Colorize the output of the test command if GRC is installed.
       - "{{.grc}} go test $(go list ./... | grep -v utils) -race -v -coverprofile={{.cov_file}}"
 
   lint:
@@ -90,8 +90,8 @@ tasks:
 
   migrate-up:
     cmds:
-      - migrate -path {{.migrations_path}} -database={{.DB_MIGRATION_ADDR}} up
+      - migrate -path {{.migrations_path}} -database={{.DB_ADDR}} up
 
   migrate-down:
     cmds:
-      - migrate -path {{.migrations_path}} -database={{.DB_MIGRATION_ADDR}} down
+      - migrate -path {{.migrations_path}} -database={{.DB_ADDR}} down
