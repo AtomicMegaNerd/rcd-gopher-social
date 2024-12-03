@@ -2,6 +2,7 @@
 
 version: '3'
 
+# Please make sure DB_MIGRATION_ADDR is set in your .envrc file.
 dotenv: [.envrc]
 
 env:
@@ -79,9 +80,12 @@ tasks:
     cmds:
       - go get -u ./...
 
-  migrate-create:
+  migrate-create-users:
     cmds:
       - migrate create -seq -ext sql -dir {{.migrations_path}} create_users
+
+  migrate-create-posts:
+    cmds:
       - migrate create -seq -ext sql -dir {{.migrations_path}} create_posts
 
   migrate-up:
