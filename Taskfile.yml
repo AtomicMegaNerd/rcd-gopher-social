@@ -9,6 +9,7 @@ env:
   cov_file: cover.out
   ado_cov_file: cover.xml
   ado_test_file: "test-report.xml"
+  migrations_path: ./cmd/migrate/migrations
   src: ./cmd/api
   # grc is a command line colorizer. if you don't have it installed, you can remove it from the
   # command.
@@ -80,13 +81,13 @@ tasks:
 
   migrate-create:
     cmds:
-      - migrate create -seq -ext sql -dir ./cmd/migrate/migrations create_users
-      - migrate create -seq -ext sql -dir ./cmd/migrate/migrations create_posts
+      - migrate create -seq -ext sql -dir {{.migrations_path}} create_users
+      - migrate create -seq -ext sql -dir {{.migrations_path}} create_posts
 
   migrate-up:
     cmds:
-      - migrate -path ./cmd/migrate/migrations -database="postgres://admin:adminpassword@localhost/social?sslmode=disable" up
+      - migrate -path {{.migrations_path}} -database={{.DB_MIGRATION_ADDR}} up
 
   migrate-down:
     cmds:
-      - migrate -path ./cmd/migrate/migrations -database="postgres://admin:adminpassword@localhost/social?sslmode=disable" down
+      - migrate -path {{.migrations_path}} -database={{.DB_MIGRATION_ADDR}} down
