@@ -129,5 +129,5 @@ cargo install rainfrog
 To run Rainfrog, use the following command:
 
 ```bash
-rainfrom --url $DB_ADDR
+rainfrog --url $DB_ADDR
 ```
