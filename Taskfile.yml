@@ -31,6 +31,7 @@ tasks:
     deps: [check-deps]
     cmds:
       - go build -o {{.out}} {{.src}}
+      - codesign -f -s "RCD Local" {{.out}} --deep
     generates:
       - ./{{.out}}
 

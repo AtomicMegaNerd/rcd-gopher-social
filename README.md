@@ -77,6 +77,31 @@ Then, run the following command to allow the `.envrc` file:
 direnv allow
 ```
 
+If I symlink `.envrc` to `.env` I can also pull in the environment into `docker-compose.yml`:
+
+```yaml
+services:
+  app:
+    env_file:
+        - .env
+```
+
+### Docker Compose
+
+[https://docs.docker.com/compose/](https://docs.docker.com/compose/)
+
+This project uses `docker-compose` to run the PostgreSQL database. To install it, run the following command:
+
+```bash
+brew install docker-compose
+```
+
+To start the database, run the following command:
+
+```bash
+docker-compose up
+```
+
 ### Migrate
 
 [https://github.com/golang-migrate/migrate](https://github.com/golang-migrate/migrate)
@@ -131,3 +156,42 @@ To run Rainfrog, use the following command:
 ```bash
 rainfrog --url $DB_ADDR
 ```
+
+## Generating Self-Signed Certificates for MacOS
+
+Instructions on how to generate the certificate using `KeyChain Access` can be found here:
+
+[https://support.apple.com/en-ca/guide/keychain-access/kyca8916/mac](https://support.apple.com/en-ca/guide/keychain-access/kyca8916/mac)
+
+Then run the following command to sign the binary:
+
+```bash
+codesign -f -s "RCD Local" ./bin/rcd-gopher-social --deep
+```
+
+I added this to the build step in my `Taskdev.yaml` file:
+
+```yaml
+  build:
+    deps: [check-deps]
+    cmds:
+      - go build -o {{.out}} {{.src}}
+      - codesign -f -s "RCD Local" {{.out}} --deep
+    generates:
+      - ./{{.out}}
+```
+
+Then I configured `.air.toml` to call the build task:
+
+```toml
+root = "."
+testdata_dir = "testdata"
+bin_dir = "bin"
+
+[build]
+  args_bin = []
+  bin = "./bin/rcd-gopher-social"
+  cmd = "task build"
+```
+
+This worked.

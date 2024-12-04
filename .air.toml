@@ -1,11 +1,11 @@
 root = "."
 testdata_dir = "testdata"
-bin_dir = "tmp"
+bin_dir = "bin"
 
 [build]
   args_bin = []
   bin = "./bin/rcd-gopher-social"
-  cmd = "go build -o .rcd-gopher-social ./cmd/api"
+  cmd = "task build"
   delay = 1000
   exclude_dir = ["assets", "bin", "vendor", "testdata", "docs", "scripts"]
   exclude_file = []

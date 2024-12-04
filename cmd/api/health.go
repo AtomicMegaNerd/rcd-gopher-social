@@ -5,5 +5,12 @@ import (
 )
 
 func (app *application) healthCheckHandler(w http.ResponseWriter, r *http.Request) {
-	_, _ = w.Write([]byte("APP OK"))
+	data := map[string]string{
+		"status":  "ok",
+		"env":     app.config.env,
+		"version": version,
+	}
+	if err := writeJSON(w, http.StatusOK, data); err != nil {
+		_ = writeJSONError(w, http.StatusInternalServerError, "could not write response")
+	}
 }

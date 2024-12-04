@@ -13,6 +13,7 @@ import (
 type config struct {
 	addr string
 	db   dbConfig
+	env  string
 }
 
 type application struct {
@@ -51,6 +52,10 @@ func (app *application) mount() http.Handler {
 	// We can group routes by version
 	r.Route("/v1", func(r chi.Router) {
 		r.Get("/health", app.healthCheckHandler)
+
+		r.Route("/posts", func(r chi.Router) {
+			r.Post("/", app.createPostHandler)
+		})
 	})
 
 	return r
