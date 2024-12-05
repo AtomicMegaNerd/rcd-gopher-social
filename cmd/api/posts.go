@@ -10,14 +10,9 @@ import (
 )
 
 type CreatePostPayload struct {
-	Title string `json:"title" validate:"required,max=100"`
-
-	// TODO: Add validation rules as we have set this to text type in the database. We need
-	// to set a maximum length for the content. The instructor for this course did this
-	// deliberately to show how to add validation rules and to highlight the vulnerability.
-	Content string `json:"content" validate:"required,max=1000"`
-
-	Tags []string `json:"tags"` // Optional
+	Title   string   `json:"title" validate:"required,max=100"`
+	Content string   `json:"content" validate:"required,max=1000"`
+	Tags    []string `json:"tags"` // Optional
 }
 
 func (app *application) createPostHandler(w http.ResponseWriter, r *http.Request) {
