@@ -10,21 +10,26 @@ import (
 )
 
 type CreatePostPayload struct {
-	Title string `json:"title"`
+	Title string `json:"title" validate:"required,max=100"`
 
 	// TODO: Add validation rules as we have set this to text type in the database. We need
 	// to set a maximum length for the content. The instructor for this course did this
 	// deliberately to show how to add validation rules and to highlight the vulnerability.
-	Content string `json:"content"`
+	Content string `json:"content" validate:"required,max=1000"`
 
-	Tags []string `json:"tags"`
+	Tags []string `json:"tags"` // Optional
 }
 
 func (app *application) createPostHandler(w http.ResponseWriter, r *http.Request) {
 
 	var payload CreatePostPayload
 	if err := readJSON(w, r, &payload); err != nil {
-		_ = writeJSONError(w, http.StatusBadRequest, err.Error())
+		app.badRequestError(w, r, err)
+		return
+	}
+
+	if err := Validate.Struct(payload); err != nil {
+		app.badRequestError(w, r, err)
 		return
 	}
 
@@ -40,12 +45,12 @@ func (app *application) createPostHandler(w http.ResponseWriter, r *http.Request
 
 	ctx := r.Context()
 	if err := app.store.Posts.Create(ctx, post); err != nil {
-		_ = writeJSONError(w, http.StatusInternalServerError, err.Error())
+		app.internalServerError(w, r, err)
 		return
 	}
 
 	if err := writeJSON(w, http.StatusCreated, post); err != nil {
-		_ = writeJSONError(w, http.StatusInternalServerError, err.Error())
+		app.internalServerError(w, r, err)
 		return
 	}
 }
@@ -55,7 +60,7 @@ func (app *application) getPostHandler(w http.ResponseWriter, r *http.Request) {
 	id, err := strconv.ParseInt(idParam, 10, 64)
 
 	if err != nil {
-		_ = writeJSONError(w, http.StatusInternalServerError, err.Error())
+		app.internalServerError(w, r, err)
 		return
 	}
 
@@ -64,14 +69,14 @@ func (app *application) getPostHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		switch {
 		case errors.Is(err, store.ErrNotFound):
-			_ = writeJSONError(w, http.StatusNotFound, err.Error())
+			app.notFoundError(w, r, err)
 		default:
-			_ = writeJSONError(w, http.StatusInternalServerError, err.Error())
+			app.internalServerError(w, r, err)
 		}
 		return
 	}
 
 	if err = writeJSON(w, http.StatusOK, post); err != nil {
-		_ = writeJSONError(w, http.StatusInternalServerError, err.Error())
+		app.internalServerError(w, r, err)
 	}
 }
