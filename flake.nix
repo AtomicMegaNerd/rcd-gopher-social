@@ -22,6 +22,7 @@
             rainfrog
             docker-compose
             grc
+            go-migrate
           ];
         };
       });
