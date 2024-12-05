@@ -21,6 +21,7 @@
             air
             rainfrog
             docker-compose
+            grc
           ];
         };
       });
