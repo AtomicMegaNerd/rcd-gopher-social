@@ -3,7 +3,7 @@
 version: '3'
 
 # Please make sure DB_ADDR is set in your .envrc file.
-dotenv: [.envrc]
+dotenv: [.env]
 
 env:
   out: bin/rcd-gopher-social
