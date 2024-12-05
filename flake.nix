@@ -20,6 +20,7 @@
             go-task
             air
             rainfrog
+            docker-compose
           ];
         };
       });
