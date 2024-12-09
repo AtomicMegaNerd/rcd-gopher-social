@@ -90,6 +90,10 @@ tasks:
     cmds:
       - migrate create -seq -ext sql -dir {{.migrations_path}} create_posts
 
+  migrate-create-comments:
+    cmds:
+      - migrate create -seq -ext sql -dir {{.migrations_path}} create_comments
+
   migrate-up:
     cmds:
       - migrate -path {{.migrations_path}} -database={{.DB_ADDR}} up
