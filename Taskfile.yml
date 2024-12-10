@@ -101,3 +101,7 @@ tasks:
   migrate-down:
     cmds:
       - migrate -path {{.migrations_path}} -database={{.DB_ADDR}} down
+
+  migrate-drop:
+    cmds:
+      - migrate -path {{.migrations_path}} -database={{.DB_ADDR}} drop
