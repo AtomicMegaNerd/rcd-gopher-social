@@ -6,5 +6,6 @@ CREATE TABLE IF NOT EXISTS posts (
   tags VARCHAR(100)[],
   created_at TIMESTAMP(0) with time zone NOT NULL DEFAULT NOW(),
   updated_at TIMESTAMP(0) with time zone NOT NULL DEFAULT NOW(),
+	version INT DEFAULT 0,
   CONSTRAINT fk_user FOREIGN KEY (user_id) REFERENCES users(id)
 );

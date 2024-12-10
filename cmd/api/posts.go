@@ -102,7 +102,6 @@ type UpdatePostPayload struct {
 }
 
 func (app *application) updatePostHandler(w http.ResponseWriter, r *http.Request) {
-
 	var payload UpdatePostPayload
 	if err := readJSON(w, r, &payload); err != nil {
 		app.badRequestError(w, r, err)
@@ -127,7 +126,13 @@ func (app *application) updatePostHandler(w http.ResponseWriter, r *http.Request
 	ctx := r.Context()
 	err := app.store.Posts.UpdateByID(ctx, post)
 	if err != nil {
-		app.internalServerError(w, r, err)
+		switch {
+		case errors.Is(err, store.ErrConflict):
+			app.conflictError(w, r, err)
+		default:
+			app.internalServerError(w, r, err)
+		}
+		return
 	}
 
 	w.WriteHeader(http.StatusNoContent)
