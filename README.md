@@ -195,3 +195,7 @@ bin_dir = "bin"
 ```
 
 This worked.
+
+## Potential Upgrades
+
+- Migrate from `pq` to `pgx` as pg is in maintenance mode.
